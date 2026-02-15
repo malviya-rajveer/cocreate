@@ -2,21 +2,29 @@
 "use client";
 
 import { useState } from "react";
-import { auth,db } from "../../src/firebase";
+import { auth,db } from "@/src/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-
+import { useRouter } from "next/navigation";
 
 
 
 export default function SignupPage() {
 
+  const router = useRouter();
   
  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
   const handleSignup = async () => {
+
+    // basic validation
+    if (!name || !email || !password) {
+      alert("Please fill all fields");
+      return;
+    }
+
 
     try {
 
@@ -37,6 +45,9 @@ export default function SignupPage() {
       });
 
       alert("Signup Successful!");
+
+      // Redirect to dashboard
+      router.push("/dashboard");
 
      
     } catch (error) {
@@ -82,10 +93,6 @@ export default function SignupPage() {
         <button className="button" onClick={handleSignup}>
           Signup
         </button>
-
-        
-
-        
 
       </div>
 
