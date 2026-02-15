@@ -18,17 +18,36 @@ export default function LoginPage() {
 
   const handleLogin = async () => {
 
+    // validation
+    if (!email || !password) {
+      setMessage("Please fill all fields");
+      return;
+    }
+
     try {
 
       await signInWithEmailAndPassword(auth, email, password);
 
+      setMessage("Login successful");
+
+      //redirect to dashboard
       router.push("/dashboard");
 
     } catch (error) {
 
+        if (error.code === "auth/user-not-found") {
+        setMessage("User not found");
+      }
+      else if (error.code === "auth/wrong-password") {
+        setMessage("Wrong password");
+      }
+      else if (error.code === "auth/invalid-email") {
+        setMessage("Invalid email");
+      }else{
       setMessage(error.message);
 
     }
+}
 
   };
 
@@ -61,7 +80,10 @@ export default function LoginPage() {
 
         <div className="message">{message}</div>
 
-        <div className="link" onClick={() => router.push("/signup")}>
+        <div className="link"
+        onClick={() => router.push("/signup")}
+        style={{ cursor: "pointer" }}
+        >
           Don't have an account? Signup
         </div>
 
