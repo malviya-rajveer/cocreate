@@ -1,27 +1,33 @@
+
 "use client";
 
 import { useState } from "react";
-import { auth, db } from "../../src/firebase";
+import { auth,db } from "../../src/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 
-export default function Signup() {
 
-  const [name, setName] = useState("");
+
+
+export default function SignupPage() {
+
+  
+ const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  
   const handleSignup = async () => {
+
     try {
 
-      // create user in Firebase Auth
+      //create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      const user = userCredential.user;
+      const user =userCredential.user;
 
       // save extra data in Firestore
       await setDoc(doc(db, "users", user.uid), {
@@ -30,55 +36,60 @@ export default function Signup() {
         uid: user.uid,
       });
 
-      alert("Signup successful!");
+      alert("Signup Successful!");
 
+     
     } catch (error) {
+
       alert(error.message);
+
     }
+
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
+    <div className="container">
 
-      <div className="bg-zinc-900 p-8 rounded-xl shadow-lg w-96">
+      <div className="card">
 
-        <h1 className="text-white text-2xl font-bold mb-6 text-center">
-          Signup
-        </h1>
+        <div className="title">CoCreate Signup</div>
 
         <input
           type="text"
           placeholder="Name"
-          className="w-full mb-4 p-3 rounded-lg bg-zinc-800 text-white outline-none"
+          className="input"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
+
         <input
+          className="input"
           type="email"
-          placeholder="Email"
-          className="w-full mb-4 p-3 rounded-lg bg-zinc-800 text-white outline-none"
+          placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
+          className="input"
           type="password"
-          placeholder="Password"
-          className="w-full mb-6 p-3 rounded-lg bg-zinc-800 text-white outline-none"
+          placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button
-          onClick={handleSignup}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-lg font-semibold"
-        >
+        <button className="button" onClick={handleSignup}>
           Signup
         </button>
+
+        
+
+        
 
       </div>
 
     </div>
   );
+
 }
