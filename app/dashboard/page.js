@@ -13,6 +13,8 @@ export default function DashboardPage() {
 
   const [user, setUser] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [myProjects, setMyProjects] = useState([]);
+
 
     // Fetch projects
   const fetchProjects = async () => {
@@ -36,6 +38,44 @@ export default function DashboardPage() {
   }
 };
 
+const fetchMyProjects = async () => {
+
+  const user = auth.currentUser;
+
+  if (!user) return;
+
+  const querySnapshot = await getDocs(collection(db, "projects"));
+
+  const list = [];
+
+  querySnapshot.forEach((docSnap) => {
+
+    const data = docSnap.data();
+
+    const isCreator = data.createdBy === user.uid;
+
+    const isCollaborator =
+      data.collaborators?.some(
+        (c) => c.uid === user.uid
+      );
+
+    if (isCreator || isCollaborator) {
+
+      list.push({
+        id: docSnap.id,
+        ...data
+      });
+
+    }
+
+  });
+
+  setMyProjects(list);
+
+};
+
+
+
 // Logout function
   const logout = async () => {
     await signOut(auth);
@@ -45,6 +85,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchProjects();
+    fetchMyProjects();
   }, []);
 
   //join project
@@ -123,6 +164,20 @@ const isAlreadyJoined = (project) => {
 
         {/* RIGHT PANEL */}
         <div style={styles.rightCard}>
+
+          <h2 style={styles.projectTitle}>My Projects</h2>
+
+{myProjects.length === 0 ? (
+  <p>No joined projects</p>
+) : (
+  myProjects.map((project) => (
+    <div key={project.id} style={styles.projectCard}>
+      <p><b>Title:</b> {project.title}</p>
+      <p><b>Description:</b> {project.description}</p>
+    </div>
+  ))
+)}
+
 
           <h2 style={styles.projectTitle}>All Projects</h2>
 
