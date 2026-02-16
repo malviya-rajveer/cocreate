@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 
 
 
+
 export default function SignupPage() {
 
   const router = useRouter();
@@ -16,6 +17,7 @@ export default function SignupPage() {
  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   
   const handleSignup = async () => {
 
@@ -51,9 +53,11 @@ export default function SignupPage() {
 
      
     } catch (error) {
-
-      alert(error.message);
-
+       if (error.code === "auth/email-already-in-use") {
+    setError("Account already exists. Please login.");
+  } else {
+    setError("Something went wrong. Try again.");
+  }
     }
 
   };
@@ -89,6 +93,18 @@ export default function SignupPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+
+              {error && (
+  <p style={{ color: "red", marginBottom: "10px" }}>
+    {error}{" "}
+    <span
+      style={{ color: "#667eea", cursor: "pointer" }}
+      onClick={() => router.push("/login")}
+    >
+      Go to Login
+    </span>
+  </p>
+)}
 
         <button className="button" onClick={handleSignup}>
           Signup
