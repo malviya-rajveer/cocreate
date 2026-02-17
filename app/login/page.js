@@ -56,7 +56,15 @@ export default function LoginPage() {
 
       <div className="auth-card">
 
-        <h2 style={{marginBottom: "10px"}}>Login</h2>
+<div className="auth-logo">CoCreate</div>
+
+        <div className="auth-title">Welcome back</div>
+
+        <div className="auth-subtitle">
+          Login to continue
+        </div>
+
+        
 
         <input
           className="auth-input"

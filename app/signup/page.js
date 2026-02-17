@@ -67,10 +67,14 @@ export default function SignupPage() {
 
       <div className="auth-card">
 
-        <h2 style={{marginBottom: "10px"}}>Create Account</h2>
+         <div className="auth-logo">CoCreate</div>
+
+       <div className="auth-subtitle">
+          Join and start building amazing projects
+        </div>
 
         <input
-          placeholder="Name"
+          placeholder="Full Name"
           className="auth-input"
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -106,7 +110,7 @@ export default function SignupPage() {
 )}
 
         <button className="auth-button" onClick={handleSignup}>
-          Signup
+          Create Account
         </button>
 
       </div>
