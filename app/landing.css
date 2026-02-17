@@ -232,3 +232,18 @@ body {
     justify-content: space-between;
     padding: 20px;
 }
+
+.projectCard {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    width: 280px;
+}
+
+.projectGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}

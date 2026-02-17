@@ -1,106 +1,98 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { auth } from "@/src/firebase";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import "./landing.css";
+import { useRouter } from "next/navigation";
+import { auth, db } from "@/src/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Home() {
 
   const router = useRouter();
 
   const [user, setUser] = useState(null);
+  const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // check auth state
   useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-
       setUser(currentUser);
-      setLoading(false);
-
     });
+
+    fetchProjects();
 
     return () => unsubscribe();
 
   }, []);
 
-  const handleAuthAction = () => {
+  // fetch projects
+  const fetchProjects = async () => {
 
-    if (user) {
-      router.push("/dashboard");
-    } else {
-      router.push("/login");
+    try {
+
+      const snapshot = await getDocs(collection(db, "projects"));
+
+      const list = [];
+
+      snapshot.forEach((doc) => {
+        list.push({
+          id: doc.id,
+          ...doc.data(),
+        });
+      });
+
+      setProjects(list);
+
+    } catch (error) {
+      console.log(error);
     }
 
-  };
-
-  const handleLogout = async () => {
-
-    await signOut(auth);
-    router.push("/");
+    setLoading(false);
 
   };
-
 
   if (loading) {
-    return <div className="loading">Loading...</div>;
+    return (
+      <div style={styles.loading}>
+        Loading CoCreate...
+      </div>
+    );
   }
-
 
   return (
 
-    <div className="landing">
+    <div style={styles.container}>
 
       {/* NAVBAR */}
 
-      <nav className="navbar">
+      <nav style={styles.navbar}>
 
-        <div
-          className="logo"
-          onClick={() => router.push("/")}
-          style={{ cursor: "pointer" }}
-        >
+        <div style={styles.logo}>
           CoCreate
         </div>
 
-        <div className="navLinks">
+        <div style={styles.navRight}>
 
-          <span onClick={() => router.push("/")}>Features</span>
-
-          <span onClick={() => router.push("/dashboard")}>
-            Projects
-          </span>
-
-          <span>Community</span>
-
-          <span>Contact</span>
-
+          <span style={styles.navLink}>Features</span>
+          <span style={styles.navLink}>Projects</span>
+          <span style={styles.navLink}>Community</span>
 
           {user ? (
 
-            <>
-              <button
-                className="dashboardBtn"
-                onClick={() => router.push("/dashboard")}
-              >
-                Dashboard
-              </button>
-
-              <button
-                className="logoutBtn"
-                onClick={handleLogout}
-              >
-                Logout
-              </button>
-            </>
+            <button
+              style={styles.dashboardBtn}
+              onClick={() => router.push("/dashboard")}
+            >
+              Dashboard
+            </button>
 
           ) : (
 
             <button
-              className="signinBtn"
-              onClick={handleAuthAction}
+              style={styles.loginBtn}
+              onClick={() => router.push("/login")}
             >
               Sign In
             </button>
@@ -112,36 +104,35 @@ export default function Home() {
       </nav>
 
 
-
       {/* HERO */}
 
-      <section className="hero">
+      <section style={styles.hero}>
 
-        <div className="heroLeft">
+        <div>
 
-          <h1>
+          <h1 style={styles.heroTitle}>
             Build Projects.<br/>
             Find Teammates.<br/>
             Launch Startups.
           </h1>
 
-          <p>
-            CoCreate helps developers connect, collaborate,
-            and build real-world startup projects together.
+          <p style={styles.heroText}>
+            CoCreate connects developers, designers, and innovators
+            to build real-world projects together.
           </p>
 
-          <div className="heroButtons">
+          <div style={styles.heroButtons}>
 
             <button
-              className="primaryBtn"
+              style={styles.primaryBtn}
               onClick={() => router.push("/signup")}
             >
               Get Started
             </button>
 
             <button
-              className="secondaryBtn"
-              onClick={() => router.push("/dashboard")}
+              style={styles.secondaryBtn}
+              onClick={() => router.push("/all-projects")}
             >
               Explore Projects
             </button>
@@ -150,142 +141,50 @@ export default function Home() {
 
         </div>
 
+      </section>
 
-        <div className="heroRight">
 
-          <div className="heroCard">
+      {/* REAL PROJECTS */}
 
-            <h2>1000+</h2>
+      <section style={styles.projectSection}>
 
-            <p>Active Builders</p>
+        <h2>Live Projects</h2>
 
-          </div>
+        <div style={styles.projectGrid}>
+
+          {projects.slice(0, 3).map((project) => (
+
+            <div
+              key={project.id}
+              style={styles.projectCard}
+              onClick={() => router.push(`/project/${project.id}`)}
+            >
+
+              <h3>{project.title}</h3>
+
+              <p>{project.description}</p>
+
+              <small>
+                Created by: {project.createdByName}
+              </small>
+
+            </div>
+
+          ))}
 
         </div>
 
       </section>
-
-
-
-      {/* STATS */}
-
-      <section className="stats">
-
-        <div className="statCard">
-          <h3>1000+</h3>
-          <p>Developers</p>
-        </div>
-
-        <div className="statCard">
-          <h3>250+</h3>
-          <p>Projects</p>
-        </div>
-
-        <div className="statCard">
-          <h3>50+</h3>
-          <p>Startups Built</p>
-        </div>
-
-      </section>
-
-
-
-      {/* TRUST */}
-
-      <section className="trust">
-
-        <span>Trusted by developers worldwide</span>
-
-        <div className="companies">
-          Google • Microsoft • Amazon • Startups • Students
-        </div>
-
-      </section>
-
-
-
-      {/* FEATURES */}
-
-      <section className="features">
-
-        <h2>Why CoCreate?</h2>
-
-        <div className="featureGrid">
-
-          <div className="featureCard">
-
-            <div className="icon">👥</div>
-
-            <h3>Find Teammates</h3>
-
-            <p>Connect with developers globally</p>
-
-          </div>
-
-
-          <div className="featureCard">
-
-            <div className="icon">🚀</div>
-
-            <h3>Build Together</h3>
-
-            <p>Collaborate on real startup projects</p>
-
-          </div>
-
-
-          <div className="featureCard">
-
-            <div className="icon">🌎</div>
-
-            <h3>Grow Network</h3>
-
-            <p>Expand your professional network</p>
-
-          </div>
-
-        </div>
-
-      </section>
-
-
-
-      {/* PROJECT CATEGORIES */}
-
-      <section className="projects">
-
-        <h2>Popular Categories</h2>
-
-        <div className="projectGrid">
-
-          <div className="projectCard">Web Apps</div>
-
-          <div className="projectCard">AI Projects</div>
-
-          <div className="projectCard">Startups</div>
-
-          <div className="projectCard">Mobile Apps</div>
-
-          <div className="projectCard">Open Source</div>
-
-          <div className="projectCard">SaaS</div>
-
-        </div>
-
-      </section>
-
 
 
       {/* CTA */}
 
-      <section className="cta">
+      <section style={styles.cta}>
 
-        <h2>Start building your future today</h2>
-
-        <p>Join thousands of builders already collaborating.</p>
+        <h2>Ready to build something amazing?</h2>
 
         <button
-          className="primaryBtn"
+          style={styles.primaryBtn}
           onClick={() => router.push("/signup")}
         >
           Join CoCreate
@@ -294,30 +193,10 @@ export default function Home() {
       </section>
 
 
-
       {/* FOOTER */}
 
-      <footer className="footer">
-
-        <div className="footerContent">
-
-          <div>
-
-            <h3>CoCreate</h3>
-
-            <p>Build startups together.</p>
-
-          </div>
-
-
-          <div>
-
-            <p>© 2026 CoCreate</p>
-
-          </div>
-
-        </div>
-
+      <footer style={styles.footer}>
+        © 2026 CoCreate. All rights reserved.
       </footer>
 
 
@@ -326,3 +205,131 @@ export default function Home() {
   );
 
 }
+
+
+const styles = {
+
+  container: {
+    fontFamily: "Arial",
+  },
+
+  loading: {
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "24px",
+  },
+
+  navbar: {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "20px 40px",
+    background: "white",
+    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+  },
+
+  logo: {
+    fontSize: "22px",
+    fontWeight: "bold",
+    color: "#4f46e5",
+  },
+
+  navRight: {
+    display: "flex",
+    gap: "20px",
+    alignItems: "center",
+  },
+
+  navLink: {
+    cursor: "pointer",
+  },
+
+  loginBtn: {
+    padding: "8px 16px",
+    background: "#4f46e5",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+
+  dashboardBtn: {
+    padding: "8px 16px",
+    background: "#22c55e",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+
+  hero: {
+    padding: "80px 40px",
+    background: "linear-gradient(to right, #667eea, #764ba2)",
+    color: "white",
+  },
+
+  heroTitle: {
+    fontSize: "42px",
+  },
+
+  heroText: {
+    marginTop: "10px",
+  },
+
+  heroButtons: {
+    marginTop: "20px",
+    display: "flex",
+    gap: "10px",
+  },
+
+  primaryBtn: {
+    padding: "12px 20px",
+    background: "#22c55e",
+    color: "white",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+
+  secondaryBtn: {
+    padding: "12px 20px",
+    background: "white",
+    color: "#4f46e5",
+    border: "none",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+
+  projectSection: {
+    padding: "40px",
+  },
+
+  projectGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))",
+    gap: "20px",
+    marginTop: "20px",
+  },
+
+  projectCard: {
+    padding: "20px",
+    background: "#f4f6ff",
+    borderRadius: "10px",
+    cursor: "pointer",
+  },
+
+  cta: {
+    padding: "60px",
+    textAlign: "center",
+    background: "#f9fafb",
+  },
+
+  footer: {
+    padding: "20px",
+    textAlign: "center",
+    background: "#111",
+    color: "white",
+  },
+
+};
