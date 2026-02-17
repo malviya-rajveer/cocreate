@@ -166,6 +166,7 @@ const styles = {
 
   username: {
     fontWeight: "bold",
+    color:"black",
   },
 
   logoutBtn: {
@@ -190,6 +191,7 @@ const styles = {
     borderRadius: "12px",
     width: "350px",
     textAlign: "center",
+    color:"black",
     boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
   },
 
