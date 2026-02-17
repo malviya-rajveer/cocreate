@@ -80,7 +80,7 @@ export default function AllProjects() {
 
     <button
       style={styles.backBtn}
-      onClick={() => router.push("/dashboard")}
+      onClick={() => router.back()}
     >
       ← Back
     </button>
