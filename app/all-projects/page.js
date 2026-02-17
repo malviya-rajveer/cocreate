@@ -11,6 +11,8 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 export default function AllProjects() {
 
@@ -69,43 +71,58 @@ export default function AllProjects() {
     fetchProjects();
   };
 
-  return (
+  
+    return (
 
-    <div style={styles.container}>
+  <div style={styles.container}>
 
-      <h1>All Projects</h1>
+    <h1>All Projects</h1>
 
-      <button
-        style={styles.backBtn}
-        onClick={() => router.push("/dashboard")}
+    <button
+      style={styles.backBtn}
+      onClick={() => router.push("/dashboard")}
+    >
+      ← Back
+    </button>
+
+    {projects.map((project) => (
+
+      <div
+        key={project.id}
+        style={styles.card}
+        onClick={() => router.push(`/project/${project.id}`)}
       >
-        ← Back
-      </button>
+          <h3>{project.title}</h3>
 
-      {projects.map((project) => (
+        <p><b>Title:</b> {project.title}</p>
 
-        <div key={project.id} style={styles.card}>
+        <p><b>Description:</b> {project.description}</p>
 
-          <p><b>Title:</b> {project.title}</p>
+        <p><b>Created by:</b> {project.createdByName}</p>
 
-          <p><b>Description:</b> {project.description}</p>
+        <button
+          style={styles.joinBtn}
+          onClick={(e) => {
+            e.stopPropagation(); // IMPORTANT: prevents card click
+            joinProject(project.id);
+          }}
+        >
+          Join Project
+        </button>
 
-          <p><b>Created by:</b> {project.createdByName}</p>
 
-          <button
-            style={styles.joinBtn}
-            onClick={() => joinProject(project.id)}
-          >
-            Join Project
-          </button>
 
-        </div>
+      </div>
 
-      ))}
+    ))}
 
-    </div>
+  </div>
 
-  );
+);
+
+
+    
+  
 }
 
 const styles = {
@@ -119,6 +136,8 @@ const styles = {
     padding: "15px",
     marginTop: "15px",
     borderRadius: "8px",
+    cursor:"pointer",
+    transition: "0.2s",
   },
 
   joinBtn: {
