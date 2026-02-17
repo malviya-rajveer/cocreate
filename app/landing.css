@@ -184,3 +184,51 @@ body {
     text-align: center;
     padding: 20px;
 }
+
+.loading {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+}
+
+.statCard {
+    background: white;
+    padding: 20px 40px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+.dashboardBtn {
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.logoutBtn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.footerContent {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
