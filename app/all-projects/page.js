@@ -127,15 +127,29 @@ export default function AllProjects() {
 
 const styles = {
 
+  page: {
+    minHeight: "100vh",
+    padding: "40px",
+    color: "white",
+  },
+
+  heading: {
+    fontSize: "32px",
+    fontWeight: "600",
+    marginBottom: "20px",
+  },
+
   container: {
     padding: "40px",
   },
 
   card: {
-    background: "#f4f6ff",
-    padding: "15px",
+    background: "rgba(255,255,255,0.08)",
+    backdropFilter: "blur(16px)",
+    border: "1px solid rgba(255,255,255,0.15)",
+    padding: "25px",
     marginTop: "15px",
-    borderRadius: "8px",
+    borderRadius: "14px",
     cursor:"pointer",
     transition: "0.2s",
   },
