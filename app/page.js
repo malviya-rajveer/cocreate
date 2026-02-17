@@ -14,7 +14,6 @@ export default function Home() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // check auth state
   useEffect(() => {
 
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -27,7 +26,6 @@ export default function Home() {
 
   }, []);
 
-  // fetch projects
   const fetchProjects = async () => {
 
     try {
@@ -69,15 +67,18 @@ export default function Home() {
 
       <nav style={styles.navbar}>
 
-        <div style={styles.logo}>
+        <div
+          style={styles.logo}
+          onClick={() => router.push("/")}
+        >
           CoCreate
         </div>
 
-        <div style={styles.navRight}>
+        <div style={styles.navLinks}>
 
-          <span style={styles.navLink}>Features</span>
-          <span style={styles.navLink}>Projects</span>
-          <span style={styles.navLink}>Community</span>
+          <span style={styles.link}>Features</span>
+          <span style={styles.link}>Projects</span>
+          <span style={styles.link}>Community</span>
 
           {user ? (
 
@@ -90,13 +91,21 @@ export default function Home() {
 
           ) : (
 
-            <button
-              style={styles.loginBtn}
-              onClick={() => router.push("/login")}
-            >
-              Sign In
-            </button>
+            <>
+              <button
+                style={styles.loginBtn}
+                onClick={() => router.push("/login")}
+              >
+                Login
+              </button>
 
+              <button
+                style={styles.signupBtn}
+                onClick={() => router.push("/signup")}
+              >
+                Get Started
+              </button>
+            </>
           )}
 
         </div>
@@ -104,21 +113,21 @@ export default function Home() {
       </nav>
 
 
-      {/* HERO */}
+      {/* HERO SECTION */}
 
       <section style={styles.hero}>
 
-        <div>
+        <div style={styles.heroLeft}>
 
           <h1 style={styles.heroTitle}>
-            Build Projects.<br/>
-            Find Teammates.<br/>
-            Launch Startups.
+            Build.<br/>
+            Collaborate.<br/>
+            Launch.
           </h1>
 
           <p style={styles.heroText}>
-            CoCreate connects developers, designers, and innovators
-            to build real-world projects together.
+            The ultimate platform where developers find teammates,
+            build real projects, and launch startups together.
           </p>
 
           <div style={styles.heroButtons}>
@@ -127,7 +136,7 @@ export default function Home() {
               style={styles.primaryBtn}
               onClick={() => router.push("/signup")}
             >
-              Get Started
+              Start Building →
             </button>
 
             <button
@@ -141,18 +150,69 @@ export default function Home() {
 
         </div>
 
+
+        <div style={styles.heroRight}>
+
+          <div style={styles.heroCard}>
+            🚀
+            <p>Live Collaboration</p>
+          </div>
+
+          <div style={styles.heroCard}>
+            👥
+            <p>Find Teammates</p>
+          </div>
+
+          <div style={styles.heroCard}>
+            💡
+            <p>Launch Ideas</p>
+          </div>
+
+        </div>
+
       </section>
 
 
-      {/* REAL PROJECTS */}
+      {/* FEATURES */}
 
-      <section style={styles.projectSection}>
+      <section style={styles.features}>
 
-        <h2>Live Projects</h2>
+        <h2 style={styles.sectionTitle}>Why CoCreate?</h2>
+
+        <div style={styles.featureGrid}>
+
+          <div style={styles.featureCard}>
+            👥
+            <h3>Find Teammates</h3>
+            <p>Connect with skilled developers globally</p>
+          </div>
+
+          <div style={styles.featureCard}>
+            🚀
+            <h3>Build Real Projects</h3>
+            <p>Collaborate and gain real experience</p>
+          </div>
+
+          <div style={styles.featureCard}>
+            🌎
+            <h3>Grow Network</h3>
+            <p>Expand your startup connections</p>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* LIVE PROJECTS */}
+
+      <section style={styles.projectsSection}>
+
+        <h2 style={styles.sectionTitle}>Live Projects</h2>
 
         <div style={styles.projectGrid}>
 
-          {projects.slice(0, 3).map((project) => (
+          {projects.slice(0, 6).map((project) => (
 
             <div
               key={project.id}
@@ -162,11 +222,13 @@ export default function Home() {
 
               <h3>{project.title}</h3>
 
-              <p>{project.description}</p>
+              <p style={styles.projectDesc}>
+                {project.description}
+              </p>
 
-              <small>
-                Created by: {project.createdByName}
-              </small>
+              <p style={styles.projectAuthor}>
+                by {project.createdByName}
+              </p>
 
             </div>
 
@@ -181,13 +243,13 @@ export default function Home() {
 
       <section style={styles.cta}>
 
-        <h2>Ready to build something amazing?</h2>
+        <h2>Ready to launch your next big idea?</h2>
 
         <button
           style={styles.primaryBtn}
           onClick={() => router.push("/signup")}
         >
-          Join CoCreate
+          Join CoCreate Now
         </button>
 
       </section>
@@ -196,9 +258,8 @@ export default function Home() {
       {/* FOOTER */}
 
       <footer style={styles.footer}>
-        © 2026 CoCreate. All rights reserved.
+        © 2026 CoCreate • Built for innovators
       </footer>
-
 
     </div>
 
@@ -207,10 +268,12 @@ export default function Home() {
 }
 
 
+
 const styles = {
 
   container: {
-    fontFamily: "Arial",
+    fontFamily: "Inter, sans-serif",
+    background: "#ffffff",
   },
 
   loading: {
@@ -218,35 +281,48 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    fontSize: "24px",
+    fontSize: "22px",
   },
 
   navbar: {
     display: "flex",
     justifyContent: "space-between",
-    padding: "20px 40px",
+    padding: "20px 60px",
     background: "white",
-    boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+    boxShadow: "0 2px 15px rgba(0,0,0,0.05)",
+    position: "sticky",
+    top: 0,
+    zIndex: 100,
   },
 
   logo: {
-    fontSize: "22px",
+    fontSize: "24px",
     fontWeight: "bold",
     color: "#4f46e5",
+    cursor: "pointer",
   },
 
-  navRight: {
+  navLinks: {
     display: "flex",
     gap: "20px",
     alignItems: "center",
   },
 
-  navLink: {
+  link: {
     cursor: "pointer",
+    color: "#555",
   },
 
   loginBtn: {
     padding: "8px 16px",
+    border: "1px solid #ddd",
+    background: "white",
+    borderRadius: "6px",
+    cursor: "pointer",
+  },
+
+  signupBtn: {
+    padding: "8px 18px",
     background: "#4f46e5",
     color: "white",
     border: "none",
@@ -255,7 +331,7 @@ const styles = {
   },
 
   dashboardBtn: {
-    padding: "8px 16px",
+    padding: "8px 18px",
     background: "#22c55e",
     color: "white",
     border: "none",
@@ -264,65 +340,121 @@ const styles = {
   },
 
   hero: {
-    padding: "80px 40px",
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "80px 60px",
     background: "linear-gradient(to right, #667eea, #764ba2)",
     color: "white",
   },
 
+  heroLeft: {
+    maxWidth: "500px",
+  },
+
   heroTitle: {
-    fontSize: "42px",
+    fontSize: "52px",
+    fontWeight: "bold",
   },
 
   heroText: {
-    marginTop: "10px",
+    marginTop: "20px",
+    fontSize: "18px",
+    opacity: 0.9,
   },
 
   heroButtons: {
-    marginTop: "20px",
+    marginTop: "25px",
     display: "flex",
-    gap: "10px",
+    gap: "15px",
+  },
+
+  heroRight: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
+
+  heroCard: {
+    background: "rgba(255,255,255,0.15)",
+    padding: "20px",
+    borderRadius: "10px",
+    textAlign: "center",
   },
 
   primaryBtn: {
-    padding: "12px 20px",
+    padding: "12px 22px",
     background: "#22c55e",
     color: "white",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "8px",
     cursor: "pointer",
+    fontSize: "16px",
   },
 
   secondaryBtn: {
-    padding: "12px 20px",
+    padding: "12px 22px",
     background: "white",
     color: "#4f46e5",
     border: "none",
-    borderRadius: "6px",
+    borderRadius: "8px",
     cursor: "pointer",
   },
 
-  projectSection: {
-    padding: "40px",
+  sectionTitle: {
+    textAlign: "center",
+    marginBottom: "40px",
+  },
+
+  features: {
+    padding: "60px",
+  },
+
+  featureGrid: {
+    display: "flex",
+    gap: "20px",
+    justifyContent: "center",
+  },
+
+  featureCard: {
+    padding: "25px",
+    background: "#f9fafb",
+    borderRadius: "12px",
+    width: "250px",
+    textAlign: "center",
+  },
+
+  projectsSection: {
+    padding: "60px",
+    background: "#f9fafb",
   },
 
   projectGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(250px,1fr))",
+    gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
     gap: "20px",
-    marginTop: "20px",
   },
 
   projectCard: {
+    background: "white",
     padding: "20px",
-    background: "#f4f6ff",
     borderRadius: "10px",
     cursor: "pointer",
+    boxShadow: "0 4px 15px rgba(0,0,0,0.05)",
+  },
+
+  projectDesc: {
+    color: "#555",
+  },
+
+  projectAuthor: {
+    marginTop: "10px",
+    fontSize: "14px",
+    color: "#777",
   },
 
   cta: {
-    padding: "60px",
+    padding: "80px",
     textAlign: "center",
-    background: "#f9fafb",
   },
 
   footer: {
