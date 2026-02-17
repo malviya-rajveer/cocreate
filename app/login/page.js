@@ -52,14 +52,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container">
+    <div className="auth-container">
 
-      <div className="card">
+      <div className="auth-card">
 
-        <div className="title">CoCreate Login</div>
+        <h2 style={{marginBottom: "10px"}}>Login</h2>
 
         <input
-          className="input"
+          className="auth-input"
           type="email"
           placeholder="Enter email"
           value={email}
@@ -67,14 +67,14 @@ export default function LoginPage() {
         />
 
         <input
-          className="input"
+          className="auth-input"
           type="password"
           placeholder="Enter password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <button className="button" onClick={handleLogin}>
+        <button className="auth-button" onClick={handleLogin}>
           Login
         </button>
 
