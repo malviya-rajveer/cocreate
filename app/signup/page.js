@@ -63,31 +63,30 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="container">
+    <div className="auth-container">
 
-      <div className="card">
+      <div className="auth-card">
 
-        <div className="title">CoCreate Signup</div>
+        <h2 style={{marginBottom: "10px"}}>Create Account</h2>
 
         <input
-          type="text"
           placeholder="Name"
-          className="input"
+          className="auth-input"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
 
 
         <input
-          className="input"
-          type="email"
+          className="auth-input"
+          
           placeholder="Enter email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
         <input
-          className="input"
+          className="auth-input"
           type="password"
           placeholder="Enter password"
           value={password}
@@ -98,7 +97,7 @@ export default function SignupPage() {
   <p style={{ color: "red", marginBottom: "10px" }}>
     {error}{" "}
     <span
-      style={{ color: "#667eea", cursor: "pointer" }}
+      style={{ color: "#475ec9", cursor: "pointer" }}
       onClick={() => router.push("/login")}
     >
       Go to Login
@@ -106,7 +105,7 @@ export default function SignupPage() {
   </p>
 )}
 
-        <button className="button" onClick={handleSignup}>
+        <button className="auth-button" onClick={handleSignup}>
           Signup
         </button>
 
