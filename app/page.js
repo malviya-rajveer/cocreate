@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import "./landing.css";
 
 export default function LandingPage() {
 
@@ -8,57 +9,66 @@ export default function LandingPage() {
 
   return (
 
-    <div style={styles.page}>
+    <div className="landing">
+
 
       {/* NAVBAR */}
-      <nav style={styles.navbar}>
-        <h2 style={styles.logo}>CoCreate</h2>
 
-        <div style={styles.navLinks}>
-          <span style={styles.link}>Features</span>
-          <span style={styles.link}>Projects</span>
-          <span style={styles.link}>About</span>
-          <span style={styles.link}>Contact</span>
+      <nav className="navbar">
+
+        <div className="logo">CoCreate</div>
+
+        <div className="navLinks">
+
+          <span>Features</span>
+          <span>Projects</span>
+          <span>Community</span>
+          <span>Contact</span>
 
           <button
-            style={styles.signinBtn}
+            className="signinBtn"
             onClick={() => router.push("/login")}
           >
-            Sign in
+            Sign In
           </button>
 
         </div>
+
       </nav>
 
 
-      {/* HERO SECTION */}
-      <section style={styles.hero}>
 
-        <div style={styles.heroLeft}>
+      {/* HERO */}
 
-          <h1 style={styles.heroTitle}>
-            Find Teammates. Build Projects. Grow Together.
+      <section className="hero">
+
+        <div className="heroLeft">
+
+          <h1>
+            Build Projects.<br/>
+            Find Teammates.<br/>
+            Launch Startups.
           </h1>
 
-          <p style={styles.heroText}>
-            CoCreate helps developers collaborate, join projects,
-            and build amazing things together.
+          <p>
+            CoCreate helps developers connect, collaborate,
+            and build amazing products together.
           </p>
 
-          <div>
+          <div className="heroButtons">
 
             <button
-              style={styles.primaryBtn}
+              className="primaryBtn"
               onClick={() => router.push("/signup")}
             >
               Get Started
             </button>
 
             <button
-              style={styles.secondaryBtn}
-              onClick={() => router.push("/all-projects")}
+              className="secondaryBtn"
+              onClick={() => router.push("/login")}
             >
-              Explore Projects
+              Explore
             </button>
 
           </div>
@@ -66,46 +76,56 @@ export default function LandingPage() {
         </div>
 
 
-        <div style={styles.heroRight}>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            style={styles.heroImg}
-          />
+        <div className="heroRight">
+
+          <div className="heroCard">
+            🚀
+          </div>
+
         </div>
 
       </section>
 
 
-      {/* PARTNERS STRIP */}
-      <div style={styles.partners}>
-        <span>Google</span>
-        <span>Microsoft</span>
-        <span>Amazon</span>
-        <span>Meta</span>
-        <span>Netflix</span>
-      </div>
+
+      {/* TRUST */}
+
+      <section className="trust">
+
+        <span>Trusted by developers worldwide</span>
+
+        <div className="companies">
+          Google • Microsoft • Amazon • Startups • Students
+        </div>
+
+      </section>
+
 
 
       {/* FEATURES */}
-      <section style={styles.features}>
+
+      <section className="features">
 
         <h2>Why CoCreate?</h2>
 
-        <div style={styles.featureGrid}>
+        <div className="featureGrid">
 
-          <div style={styles.featureCard}>
-            <h3>Create Projects</h3>
-            <p>Start your own ideas and find collaborators.</p>
+          <div className="featureCard">
+            👥
+            <h3>Find Teammates</h3>
+            <p>Connect with developers globally</p>
           </div>
 
-          <div style={styles.featureCard}>
-            <h3>Join Projects</h3>
-            <p>Explore and contribute to live projects.</p>
+          <div className="featureCard">
+            🚀
+            <h3>Build Together</h3>
+            <p>Collaborate on real projects</p>
           </div>
 
-          <div style={styles.featureCard}>
-            <h3>Build Portfolio</h3>
-            <p>Showcase your real work experience.</p>
+          <div className="featureCard">
+            🌎
+            <h3>Grow Network</h3>
+            <p>Expand your startup circle</p>
           </div>
 
         </div>
@@ -113,13 +133,33 @@ export default function LandingPage() {
       </section>
 
 
-      {/* CTA */}
-      <section style={styles.cta}>
 
-        <h2>Ready to start building?</h2>
+      {/* PROJECT TYPES */}
+
+      <section className="projects">
+
+        <h2>Popular Categories</h2>
+
+        <div className="projectGrid">
+
+          <div className="projectCard">Web Apps</div>
+          <div className="projectCard">AI Projects</div>
+          <div className="projectCard">Startups</div>
+
+        </div>
+
+      </section>
+
+
+
+      {/* CTA */}
+
+      <section className="cta">
+
+        <h2>Start building your future today</h2>
 
         <button
-          style={styles.primaryBtn}
+          className="primaryBtn"
           onClick={() => router.push("/signup")}
         >
           Join CoCreate
@@ -128,144 +168,16 @@ export default function LandingPage() {
       </section>
 
 
+
       {/* FOOTER */}
-      <footer style={styles.footer}>
-        © 2026 CoCreate. All rights reserved.
+
+      <footer className="footer">
+        © 2026 CoCreate. Built for innovators.
       </footer>
+
 
     </div>
 
   );
+
 }
-
-
-
-const styles = {
-
-  page: {
-    fontFamily: "Arial",
-    background: "linear-gradient(135deg,#f5f7ff,#ffe0f0)",
-    minHeight: "100vh",
-  },
-
-
-  navbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "20px 40px",
-    background: "white",
-  },
-
-  logo: {
-    color: "#6c63ff",
-  },
-
-  navLinks: {
-    display: "flex",
-    gap: "20px",
-    alignItems: "center",
-  },
-
-  link: {
-    cursor: "pointer",
-  },
-
-  signinBtn: {
-    background: "#6c63ff",
-    color: "white",
-    border: "none",
-    padding: "8px 15px",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-
-  hero: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "60px 40px",
-    alignItems: "center",
-  },
-
-  heroLeft: {
-    maxWidth: "500px",
-  },
-
-  heroTitle: {
-    fontSize: "40px",
-  },
-
-  heroText: {
-    marginTop: "15px",
-    marginBottom: "20px",
-  },
-
-  primaryBtn: {
-    background: "#6c63ff",
-    color: "white",
-    border: "none",
-    padding: "10px 20px",
-    marginRight: "10px",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-  secondaryBtn: {
-    background: "white",
-    border: "1px solid #6c63ff",
-    padding: "10px 20px",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-  heroRight: {},
-
-  heroImg: {
-    width: "250px",
-  },
-
-
-  partners: {
-    display: "flex",
-    justifyContent: "space-around",
-    background: "linear-gradient(90deg,#6c63ff,#ff7eb3)",
-    padding: "15px",
-    color: "white",
-  },
-
-
-  features: {
-    padding: "60px 40px",
-    textAlign: "center",
-  },
-
-  featureGrid: {
-    display: "flex",
-    justifyContent: "center",
-    gap: "20px",
-    marginTop: "20px",
-  },
-
-  featureCard: {
-    background: "white",
-    padding: "20px",
-    borderRadius: "10px",
-    width: "200px",
-  },
-
-
-  cta: {
-    textAlign: "center",
-    padding: "60px",
-    background: "linear-gradient(90deg,#6c63ff,#ff7eb3)",
-    color: "white",
-  },
-
-
-  footer: {
-    textAlign: "center",
-    padding: "20px",
-    background: "white",
-  },
-
-};
