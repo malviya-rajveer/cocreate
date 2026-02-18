@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { auth,db } from "@/src/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 
@@ -45,6 +45,10 @@ export default function SignupPage() {
         email: email,
         uid: user.uid,
       });
+
+      await updateProfile(userCredential.user, {
+      displayName: name,
+    });
 
       alert("Signup Successful!");
 
