@@ -119,28 +119,3 @@ export default function MyProjects() {
   );
 }
 
-const styles = {
-
-  container: {
-    padding: "40px",
-  },
-
-  card: {
-    background: "#f4f6ff",
-    padding: "15px",
-    marginTop: "15px",
-    borderRadius: "8px",
-  },
-
-  backBtn: {
-    marginTop: "10px",
-    padding: "8px",
-    background: "#667eea",
-    color: "white",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-  },
-
-  
-};
