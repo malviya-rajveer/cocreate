@@ -57,31 +57,47 @@ export default function MyProjects() {
 
   return (
 
-    <div style={styles.container}>
+    <div className="pageContainer">
 
-      <h1>My Projects</h1>
+      <h1 className="pageTitle">My Projects</h1>
 
       <button
-        style={styles.backBtn}
+        className="backBtn"
         onClick={() => router.push("/dashboard")}
       >
         ← Back
       </button>
 
       {projects.length === 0 ? (
-        <p>No projects found</p>
+        <div className="emptyState">
+          No projects yet.
+          </div>
       ) : (
+
+        
         projects.map((project) => (
 
-          <div key={project.id} style={styles.card}>
+          <div key={project.id} 
+          className="projectCard"
+           onClick={() => router.push(`/project/${project.id}`)}
+        >
+          
+          <h3 className="projectTitle">
+            {project.title}
+          </h3>
 
-            <p><b>Title:</b> {project.title}</p>
+          <p className="projectText">
+            <span>Description:</span> {project.description}
+          </p>
 
-            <p><b>Description:</b> {project.description}</p>
+          <p className="projectText">
+            <span>Created by:</span> {project.createdByName}
+          </p>
+           
+           <div className="collabSection">
+            <span>Collaborators:</span>
 
-            <p><b>Created by:</b> {project.createdByName}</p>
-
-            <p><b>Collaborators:</b></p>
+             {project.collaborators?.length > 0 ? (
 
             <ul>
               {project.collaborators?.map((c, i) => (
@@ -89,13 +105,17 @@ export default function MyProjects() {
               ))}
             </ul>
 
+) : (
+              <p>No collaborators yet</p>
+            )}
           </div>
 
-        ))
-      )}
+       
 
     </div>
-
+        ))
+      )}
+      </div>
   );
 }
 
@@ -122,4 +142,5 @@ const styles = {
     cursor: "pointer",
   },
 
+  
 };
