@@ -40,7 +40,7 @@ export default function Dashboard() {
 
   const logout = async () => {
     await signOut(auth);
-    router.push("/login");
+    router.push("/");
   };
 
   if (loading) return <h2 style={{color:"white",textAlign:"center"}}>Loading...</h2>;
