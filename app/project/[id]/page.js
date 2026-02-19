@@ -75,13 +75,70 @@ export default function ProjectDetails() {
         </Link>
 
 
+<div>
+<span className="inline-block mb-3 px-3 py-1 text-xs font-semibold bg-green-500/20 text-green-400 border border-green-500/30 rounded-full">
+  ● Active Project
+</span>
 
+</div>
 
         <h1>{project.title}</h1>
 
         <p><b>Description:</b> {project.description}</p>
 
         <p><b>Created by:</b> {project.createdByName}</p>
+
+
+{/* Collaborators Section */}
+<div className="mt-8">
+  <h3 className="text-xl font-semibold mb-4 text-white">
+    Collaborators
+  </h3>
+
+  {project.collaborators?.length > 0 ? (
+    <div className="space-y-3">
+      {project.collaborators.map((collab, index) => (
+        <div
+          key={index}
+          className="flex items-center justify-between bg-white/5 border border-white/10 px-4 py-3 rounded-lg hover:bg-white/10 transition"
+        >
+          <span className="text-gray-200 font-medium">
+            {collab.name}
+          </span>
+
+          <span className="text-xs text-gray-400">
+            [Collaborator]
+          </span>
+        </div>
+      ))}
+    </div>
+  ) : (
+    <p className="text-gray-400">No collaborators yet</p>
+  )}
+</div>
+
+
+{/* Action Buttons */}
+<div className="mt-8 flex flex-wrap gap-4">
+
+<div>
+ <button
+    style={styles.button}
+  >
+    Invite Collaborator
+  </button>
+       
+  <button
+style={styles.button}  >
+    Open Discussion
+  </button>
+</div>
+ 
+
+  
+
+</div>
+
 
         <button
           style={styles.button}
