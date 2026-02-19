@@ -218,6 +218,14 @@ body {
     cursor: pointer;
 }
 
+.profileBtn{
+background: #ef4444;
+    color: white;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
 .logoutBtn {
     background: #ef4444;
     color: white;

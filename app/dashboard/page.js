@@ -117,7 +117,32 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <button
+
+<div className="headerButtons">
+
+  <button
+    className="profileBtn"
+    onClick={() => router.push("/profile")}
+  >
+    Profile
+  </button>
+
+  <button
+    className="profileBtn"
+    onClick={() => {
+      auth.signOut();
+      router.push("/");
+    }}
+  >
+    Logout
+  </button>
+
+</div>
+
+
+
+
+        {/* <button
           style={styles.logoutBtn}
           onClick={() => {
             auth.signOut();
@@ -125,9 +150,13 @@ export default function Dashboard() {
           }}
         >
           Logout
-        </button>
+        </button> */}
 
-      </div>
+      
+
+
+
+</div>
 
 
       {/* STATS */}

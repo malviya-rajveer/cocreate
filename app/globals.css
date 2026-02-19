@@ -572,3 +572,19 @@ body {
   color: #94a3b8;
   margin-top: 40px;
 }
+
+.profileBtn {
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #6366f1, #4f46e5);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+
+.headerButtons {
+  display: flex;
+  gap: 10px;
+}
