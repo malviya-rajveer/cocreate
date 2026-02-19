@@ -1,171 +1,229 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { auth, db } from "@/src/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
-import { useRouter } from "next/navigation";
+import {
+  doc,
+  setDoc,
+  getDoc
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 export default function ProfilePage() {
 
-  const router = useRouter();
-
   const [user, setUser] = useState(null);
 
-  const [form, setForm] = useState({
-    name: "",
-    role: "Founder",
-    bio: "",
-    skills: "",
-    interests: ""
-  });
-
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("Founder");
+  const [bio, setBio] = useState("");
+  const [skills, setSkills] = useState("");
+  const [interests, setInterests] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [loading, setLoading] = useState(true);
-
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+if (user) {
 
-    const fetchUser = async () => {
+      setUser(user);
+      loadProfile(user.uid);
 
-      const currentUser = auth.currentUser;
+    } else {
 
-      if (!currentUser) {
-        router.push("/login");
-        return;
-      }
+      router.push("/login");
 
-      setUser(currentUser);
+    }
 
-      const docRef = doc(db, "users", currentUser.uid);
+  });
 
-      const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
+    const currentUser = auth.currentUser;
 
-        const data = docSnap.data();
+    if (!currentUser) return;
 
-        setForm({
-          name: data.name || "",
-          role: data.role || "Founder",
-          bio: data.bio || "",
-          skills: data.skills?.join(", ") || "",
-          interests: data.interests?.join(", ") || ""
-        });
+    setUser(currentUser);
 
-      }
-
-      setLoading(false);
-    };
-
-    fetchUser();
+    loadProfile(currentUser.uid);
 
   }, []);
 
+  const loadProfile = async (uid) => {
 
-  const handleSave = async () => {
+    const docRef = doc(db, "users", uid);
 
-    await setDoc(doc(db, "users", user.uid), {
+    const snap = await getDoc(docRef);
 
-      name: form.name,
-      email: user.email,
+    if (snap.exists()) {
 
-      role: form.role,
+      const data = snap.data();
 
-      bio: form.bio,
+      setName(data.name || "");
+      setRole(data.role || "Founder");
+      setBio(data.bio || "");
+      setSkills(data.skills?.join(", ") || "");
+      setInterests(data.interests || "");
+      setAvatar(data.avatar || "");
 
-      skills: form.skills.split(",").map(s => s.trim()),
+    } else {
 
-      interests: form.interests.split(",").map(i => i.trim()),
+      setName(auth.currentUser.displayName || "");
+    }
 
-      uid: user.uid
-
-    }, { merge: true });
-
-    alert("Profile saved successfully");
+    setLoading(false);
 
   };
 
+  const handleAvatarUpload = (e) => {
 
-  if (loading) return <div className="text-white p-10">Loading...</div>;
+    const file = e.target.files[0];
 
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setAvatar(reader.result);
+    };
+
+    reader.readAsDataURL(file);
+
+  };
+
+  const handleSave = async () => {
+
+    if (!user) return;
+
+    setSaving(true);
+
+    try {
+
+      await setDoc(doc(db, "users", user.uid), {
+
+        name,
+        role,
+        bio,
+        skills: skills.split(",").map(s => s.trim()),
+        interests,
+        avatar,
+        email: user.email,
+        updatedAt: new Date()
+
+      });
+
+      alert("Profile saved successfully");
+
+    } catch (error) {
+
+      console.error(error);
+      alert("Error saving profile");
+
+    }
+
+    setSaving(false);
+
+  };
+
+  if (loading) {
+    return <div className="profileContainer">Loading...</div>;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#0b1b34] to-[#020617] text-white p-8">
 
-      <div className="max-w-2xl mx-auto bg-white/5 border border-white/10 rounded-xl p-8">
+    <div className="profileContainer">
 
-        <h1 className="text-3xl font-bold mb-6">
-          Your Profile
-        </h1>
+      <div className="profileCard">
 
+        <h1 className="profileTitle">Your Profile</h1>
 
-        {/* Name */}
+        {/* Avatar */}
+
+        <div className="avatarSection">
+
+          <img
+            src={avatar || "/default-avatar.png"}
+            className="avatar"
+          />
+
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleAvatarUpload}
+          />
+
+        </div>
+
+        {/* Form */}
+
         <input
-          className="w-full mb-4 p-3 rounded bg-white/10 border border-white/10"
+          className="profileInput"
           placeholder="Full Name"
-          value={form.name}
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
+          value={name}
+          onChange={(e) => setName(e.target.value)}
         />
 
-
-        {/* Role */}
         <select
-          className="w-full mb-4 p-3 rounded bg-white/10 border border-white/10"
-          value={form.role}
-          onChange={(e) =>
-            setForm({ ...form, role: e.target.value })
-          }
+          className="profileInput"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
         >
           <option>Founder</option>
-          <option>Collaborator</option>
+          <option>Developer</option>
+          <option>Designer</option>
           <option>Investor</option>
         </select>
 
-
-        {/* Bio */}
         <textarea
-          className="w-full mb-4 p-3 rounded bg-white/10 border border-white/10"
+          className="profileInput"
           placeholder="Bio"
-          value={form.bio}
-          onChange={(e) =>
-            setForm({ ...form, bio: e.target.value })
-          }
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
         />
 
-
-        {/* Skills */}
         <input
-          className="w-full mb-4 p-3 rounded bg-white/10 border border-white/10"
+          className="profileInput"
           placeholder="Skills (comma separated)"
-          value={form.skills}
-          onChange={(e) =>
-            setForm({ ...form, skills: e.target.value })
-          }
+          value={skills}
+          onChange={(e) => setSkills(e.target.value)}
         />
 
+        {/* Skills Preview */}
 
-        {/* Interests */}
+        <div className="skillsPreview">
+
+          {skills.split(",").map((skill, i) => (
+
+            skill.trim() && (
+
+              <span key={i} className="skillTag">
+                {skill.trim()}
+              </span>
+
+            )
+
+          ))}
+
+        </div>
+
         <input
-          className="w-full mb-6 p-3 rounded bg-white/10 border border-white/10"
+          className="profileInput"
           placeholder="Startup interests"
-          value={form.interests}
-          onChange={(e) =>
-            setForm({ ...form, interests: e.target.value })
-          }
+          value={interests}
+          onChange={(e) => setInterests(e.target.value)}
         />
-
 
         <button
+          className="profileSaveBtn"
           onClick={handleSave}
-          className="w-full bg-indigo-600 hover:bg-indigo-700 p-3 rounded font-semibold"
+          disabled={saving}
         >
-          Save Profile
+          {saving ? "Saving..." : "Save Profile"}
         </button>
 
       </div>
 
     </div>
+
   );
 
 }
