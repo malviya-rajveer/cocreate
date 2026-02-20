@@ -7,7 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function ProjectDetails() {
-  const { id } = useParams();   // ✅ only once
+  const { id } = useParams();
   const router = useRouter();
 
   const [project, setProject] = useState(null);
@@ -39,50 +39,61 @@ export default function ProjectDetails() {
   if (!project) return <h2 className="loading-text">No project found</h2>;
 
   return (
-    <div className="project-container">
-      <h1 className="project-heading">Project Details</h1>
+  <div className="saas-container">
 
-      <div className="project-card">
-        <h2>Project ID:</h2>
-        <p>{id}</p>
+    {/* Header */}
+    <div className="saas-header">
+      <h1 className="saas-title">{project.title}</h1>
+      <p className="saas-description">{project.description}</p>
+    </div>
 
-        <h1 className="project-title">{project.title}</h1>
+    {/* Founder Section */}
+    <div className="saas-section">
+      <h3 className="section-label">Founder</h3>
 
-        <p>
-          <b>Description:</b> {project.description}
-        </p>
-
-        <p>
-          <b>Created by:</b> {project.createdByName}
-        </p>
-
-        <div className="collab-section">
-          <span>Collaborators:</span>
-
-          {project.collaborators?.length > 0 ? (
-            <ul>
-              {project.collaborators.map((c, i) => (
-                <li key={i}>{c.name}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>No collaborators yet</p>
-          )}
+      <div className="profile-row">
+        <div className="avatar">
+          {project.createdByName?.charAt(0).toUpperCase()}
         </div>
-
-        <Link href="/dashboard">
-          <button className="project-button">
-            Back to Dashboard
-          </button>
-        </Link>
-
-        <button
-          className="project-button secondary-btn"
-          onClick={() => router.back()}
-        >
-          Back
-        </button>
+        <div>
+          <p className="profile-name">{project.createdByName}</p>
+          <p className="profile-role">Founder</p>
+        </div>
       </div>
     </div>
-  );
-}
+
+    {/* Team Section */}
+    <div className="saas-section">
+      <h3 className="section-label">Team</h3>
+
+      {project.collaborators?.length > 0 ? (
+        <div className="team-list">
+          {project.collaborators.map((c, i) => (
+            <div key={i} className="profile-row">
+              <div className="avatar light">
+                {c.name?.charAt(0).toUpperCase()}
+              </div>
+              <div>
+                <p className="profile-name">{c.name}</p>
+                <p className="profile-role muted">Collaborator</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="muted">No collaborators yet</p>
+      )}
+    </div>
+
+    {/* Actions */}
+    <div className="saas-actions">
+      <button
+        className="btn-primary"
+        onClick={() => router.back()}
+      >
+        Back
+      </button>
+    </div>
+
+  </div>
+)};
