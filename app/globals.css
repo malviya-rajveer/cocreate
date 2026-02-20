@@ -1030,3 +1030,18 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
 }
+
+.clickable {
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.clickable:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 0 4px rgba(148, 163, 184, 0.15);
+}
+
+.link-row {
+  text-decoration: none;
+  color: inherit;
+}

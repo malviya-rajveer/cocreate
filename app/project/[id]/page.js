@@ -52,9 +52,12 @@ export default function ProjectDetails() {
       <h3 className="section-label">Founder</h3>
 
       <div className="profile-row">
-        <div className="avatar">
-          {project.createdByName?.charAt(0).toUpperCase()}
-        </div>
+  <Link href={`/profile/${project.createdBy}`}>
+    <div className="avatar clickable">
+      {project.createdByName?.charAt(0).toUpperCase()}
+    </div>
+  </Link>
+
         <div>
           <p className="profile-name">{project.createdByName}</p>
           <p className="profile-role">Founder</p>
@@ -70,7 +73,8 @@ export default function ProjectDetails() {
         <div className="team-list">
           {project.collaborators.map((c, i) => (
             <div key={i} className="profile-row">
-              <div className="avatar light">
+              <Link href={`/profile/${c.id}`}></Link>
+              <div className="avatar light clickable">
                 {c.name?.charAt(0).toUpperCase()}
               </div>
               <div>
