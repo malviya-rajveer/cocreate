@@ -2,8 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { db } from "@/src/firebase";
-import { doc, getDoc, collection, query, where, getDocs } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 
 export default function PublicProfile() {
   const params = useParams();
@@ -11,21 +19,24 @@ export default function PublicProfile() {
 
   const [userData, setUserData] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        // Fetch user data
+        // 1️⃣ Fetch user data
         const userRef = doc(db, "users", userId);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
           setUserData(userSnap.data());
+        } else {
+          setUserData(null);
         }
 
-        // Fetch projects created by this user
+        // 2️⃣ Fetch projects created by this user
         const projectsRef = collection(db, "projects");
-        const q = query(projectsRef, where("founderId", "==", userId));
+        const q = query(projectsRef, where("createdBy", "==", userId));
         const querySnapshot = await getDocs(q);
 
         const userProjects = [];
@@ -37,12 +48,16 @@ export default function PublicProfile() {
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
+
+      setLoading(false);
     };
 
-    if (userId) fetchProfile();
+    if (userId) {
+      fetchProfile();
+    }
   }, [userId]);
 
-  if (!userData) {
+  if (loading) {
     return (
       <div className="auth-container">
         <div className="auth-card">Loading profile...</div>
@@ -50,60 +65,90 @@ export default function PublicProfile() {
     );
   }
 
-  return (
-    <div className="auth-container">
-      <div className="auth-card">
+  if (!userData) {
+    return (
+      <div className="auth-container">
+        <div className="auth-card">User not found.</div>
+      </div>
+    );
+  }
 
-        <div className="auth-logo">{userData.name}</div>
+ return (
+  <div className="profile-page">
+    <div className="profile-container">
 
-        <div style={{ marginBottom: "10px", fontWeight: "bold", color: "#475ec9" }}>
-          {userData.role?.toUpperCase()}
+      {/* HEADER */}
+      <div className="profile-card">
+        <div className="profile-header">
+          <div className="profile-avatar">
+            {userData.name?.charAt(0).toUpperCase()}
+          </div>
+
+          <div>
+            <h1 className="profile-name">{userData.name}</h1>
+            <p className="profile-role">FOUNDER</p>
+          </div>
         </div>
 
-        <p style={{ marginBottom: "10px" }}>{userData.bio}</p>
+        {/* ABOUT */}
+        <div className="profile-about">
+          <p className="profile-bio">
+            {userData.bio || "No bio added yet."}
+          </p>
 
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Location:</strong> {userData.location}
+          <div className="profile-grid">
+            <div>
+              <span className="label">Location:</span>
+              <span>{userData.location || " Not specified"}</span>
+            </div>
+
+            <div>
+              <span className="label">Skills:</span>
+              <span>
+                {userData.skills?.length
+                  ? userData.skills.join(", ")
+                  : " No skills added"}
+              </span>
+            </div>
+
+            <div>
+              <span className="label">Interests:</span>
+              <span>
+                {userData.interests?.length
+                  ? userData.interests.join(", ")
+                  : " No interests added"}
+              </span>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <div style={{ marginBottom: "10px" }}>
-          <strong>Skills:</strong>{" "}
-          {userData.skills?.join(", ")}
-        </div>
-
-        <div style={{ marginBottom: "20px" }}>
-          <strong>Interests:</strong>{" "}
-          {userData.interests?.join(", ")}
-        </div>
-
-        <hr style={{ margin: "20px 0" }} />
-
-        <div style={{ fontWeight: "bold", marginBottom: "10px" }}>
-          Projects Created
-        </div>
+      {/* PROJECTS */}
+      <div className="projects-section">
+        <h2>Projects Created</h2>
 
         {projects.length === 0 ? (
-          <p>No projects yet.</p>
+          <p className="empty-text">No projects yet.</p>
         ) : (
-          projects.map((project) => (
-            <div
-              key={project.id}
-              style={{
-                padding: "10px",
-                border: "1px solid #eee",
-                borderRadius: "8px",
-                marginBottom: "10px"
-              }}
-            >
-              <div style={{ fontWeight: "bold" }}>{project.title}</div>
-              <div style={{ fontSize: "14px", color: "gray" }}>
-                {project.description}
-              </div>
-            </div>
-          ))
-        )}
+          <div className="project-list">
+            {projects.map((project) => (
+              <div key={project.id} className="project-card">
+                <h3 className="project-title">{project.title}</h3>
+                <p className="project-desc">{project.description}</p>
 
+                {project.collaboratorNames?.length > 0 && (
+                  <p className="collaborators">
+                    <strong>Collaborators:</strong>{" "}
+                    {project.collaboratorNames.join(", ")}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
+
     </div>
-  );
+  </div>
+);
 }
