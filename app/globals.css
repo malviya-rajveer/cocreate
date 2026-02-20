@@ -706,3 +706,190 @@ body {
 .empty-text {
   color: #94a3b8;
 }
+
+
+
+/* PROJECT PUBLIC PAGE */
+
+.project-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #0b1120, #000);
+  padding: 60px 20px;
+  color: white;
+}
+
+.project-container {
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* HEADER */
+.project-header {
+  margin-bottom: 50px;
+}
+
+.project-title {
+  font-size: 40px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.project-description {
+  font-size: 18px;
+  color: #cbd5e1;
+  max-width: 700px;
+}
+
+/* FOUNDER */
+.founder-section h3,
+.team-section h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.founder-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: 0.3s ease;
+}
+
+.founder-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-3px);
+}
+
+.founder-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.founder-name {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.founder-role {
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+/* TEAM */
+.team-section {
+  margin-top: 40px;
+}
+
+.team-list {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.team-member {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px 15px;
+  border-radius: 30px;
+}
+
+.team-avatar {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+
+/* Full page background */
+.project-container {
+  padding: 40px;
+  background-color: #0f172a;
+  min-height: 100vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Page heading */
+.project-heading {
+  font-size: 32px;
+  margin-bottom: 20px;
+}
+
+/* Card */
+.project-card {
+  background-color: #1e293b;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Title inside card */
+.project-title {
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+/* Collaborators */
+.collab-section {
+  margin-top: 15px;
+}
+
+.collab-section ul {
+  margin-top: 8px;
+  padding-left: 20px;
+}
+
+/* Buttons */
+.project-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.project-button:hover {
+  background-color: #2563eb;
+}
+
+.secondary-btn {
+  margin-left: 10px;
+  background-color: #475569;
+}
+
+.secondary-btn:hover {
+  background-color: #334155;
+}
+
+/* Loading text */
+.loading-text {
+  color: white;
+  text-align: center;
+  margin-top: 100px;
+}
