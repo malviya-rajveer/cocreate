@@ -85,7 +85,7 @@ export default function CompleteProfile() {
           value={role}
           onChange={(e) => setRole(e.target.value)}
         >
-          <option value="">Select Role</option>
+          <option className="role-option" value="">Select Role</option>
           <option className="role-option" value="founder">Founder</option>
           <option className="role-option" value="collaborator">Collaborator</option>
           <option className="role-option" value="investor">Investor</option>

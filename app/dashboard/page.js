@@ -7,7 +7,9 @@ import {
   collection,
   query,
   where,
-  getDocs
+  getDocs,
+  doc,
+  getDoc
 } from "firebase/firestore";
 
 export default function Dashboard() {
@@ -15,6 +17,8 @@ export default function Dashboard() {
   const router = useRouter();
 
   const [userName, setUserName] = useState("");
+  const [userData, setUserData] = useState(null);
+  const [showMenu, setShowMenu] = useState(false);
   const [createdCount, setCreatedCount] = useState(0);
   const [joinedCount, setJoinedCount] = useState(0);
   const [recentProjects, setRecentProjects] = useState([]);
@@ -39,6 +43,13 @@ export default function Dashboard() {
 
       setUserName(user.displayName || user.email);
 
+      // Fetch full user document (for avatar/profile)
+      const userRef = doc(db, "users", user.uid);
+      const userSnap = await getDoc(userRef);
+      if (userSnap.exists()) {
+        setUserData(userSnap.data());
+      }
+
       // Created projects
       const createdQuery = query(
         collection(db, "projects"),
@@ -55,9 +66,9 @@ export default function Dashboard() {
       let joined = 0;
       let recent = [];
 
-      joinedSnap.forEach((doc) => {
+      joinedSnap.forEach((docItem) => {
 
-        const data = doc.data();
+        const data = docItem.data();
 
         if (data.collaborators) {
 
@@ -69,7 +80,7 @@ export default function Dashboard() {
         }
 
         recent.push({
-          id: doc.id,
+          id: docItem.id,
           ...data
         });
 
@@ -77,7 +88,6 @@ export default function Dashboard() {
 
       setJoinedCount(joined);
 
-      // Show latest 3 projects
       setRecentProjects(recent.slice(0, 3));
 
       setLoading(false);
@@ -117,18 +127,56 @@ export default function Dashboard() {
           </p>
         </div>
 
-        <button
-          style={styles.logoutBtn}
-          onClick={() => {
-            auth.signOut();
-            router.push("/");
-          }}
-        >
-          Logout
-        </button>
+        {/* AVATAR SECTION */}
 
-      
-</div>
+        <div style={{ position: "relative" }}>
+
+          <div
+            onClick={() => setShowMenu(!showMenu)}
+            style={styles.avatar}
+          >
+            {userData?.name
+              ? userData.name.charAt(0).toUpperCase()
+              : userName.charAt(0).toUpperCase()}
+          </div>
+
+          {showMenu && (
+            <div style={styles.dropdown}>
+
+              <div
+                style={styles.dropdownItem}
+                onClick={() =>
+                  router.push(`/profile/${auth.currentUser.uid}`)
+                }
+              >
+                View Profile
+              </div>
+
+              <div
+                style={styles.dropdownItem}
+                onClick={() =>
+                  router.push("/profile/edit")
+                }
+              >
+                Edit Profile
+              </div>
+
+              <div
+                style={{ ...styles.dropdownItem, color: "#ef4444" }}
+                onClick={() => {
+                  auth.signOut();
+                  router.push("/");
+                }}
+              >
+                Logout
+              </div>
+
+            </div>
+          )}
+
+        </div>
+
+      </div>
 
 
       {/* STATS */}
@@ -222,7 +270,6 @@ export default function Dashboard() {
 
       </div>
 
-
     </div>
 
   );
@@ -262,13 +309,34 @@ const styles = {
     opacity: 0.7,
   },
 
-  logoutBtn: {
-    padding: "10px 18px",
-    background: "#ef4444",
-    border: "none",
-    borderRadius: "8px",
-    color: "white",
+  avatar: {
+    width: "45px",
+    height: "45px",
+    borderRadius: "50%",
+    background: "#6366f1",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontWeight: "bold",
     cursor: "pointer",
+    fontSize: "18px"
+  },
+
+  dropdown: {
+    position: "absolute",
+    top: "55px",
+    right: "0",
+    background: "#1e293b",
+    borderRadius: "10px",
+    padding: "10px",
+    width: "160px",
+    boxShadow: "0 10px 20px rgba(0,0,0,0.3)"
+  },
+
+  dropdownItem: {
+    padding: "8px",
+    cursor: "pointer",
+    borderRadius: "6px"
   },
 
   statsGrid: {
