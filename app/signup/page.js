@@ -44,16 +44,22 @@ export default function SignupPage() {
         name: name,
         email: email,
         uid: user.uid,
+        role: null,          // important
+  bio: "",
+  skills: [],
+  interests: [],
+  location: "",
+  createdAt: new Date()
       });
 
       await updateProfile(userCredential.user, {
       displayName: name,
     });
 
-      alert("Signup Successful!");
+      
 
-      // Redirect to dashboard
-      router.push("/dashboard");
+      // Redirect to complete-profile page
+      router.push("/complete-profile");
 
      
     } catch (error) {
@@ -63,6 +69,8 @@ export default function SignupPage() {
     setError("Something went wrong. Try again.");
   }
     }
+
+   
 
   };
 
