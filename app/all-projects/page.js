@@ -11,7 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+
 
 
 export default function AllProjects() {
