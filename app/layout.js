@@ -3,12 +3,9 @@ import "./globals.css";
 
 export default function RootLayout({ children }) {
   return (
-    <html>
+    <html suppressHydrationWarning>
       <body>
-        
-{children}
-       
-        
+          {children}  
       </body>
     </html>
   );
