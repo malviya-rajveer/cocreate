@@ -28,10 +28,10 @@ export default function Dashboard() {
 
     const user = auth.currentUser;
 
-    if (!user) {
-      router.push("/login");
-      return;
-    }
+    // if (!user) {
+    //   router.push("/login");
+    //   return;
+    // }
 
     fetchDashboardData(user);
 

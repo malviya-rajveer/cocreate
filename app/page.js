@@ -5,7 +5,6 @@ import { auth, db } from "@/src/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/navigation";
-
 export default function Home() {
 
   const router = useRouter();
